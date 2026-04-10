@@ -60,7 +60,8 @@ body::after {
 
 
 
-img {
+img,
+video {
     max-width: 100%;
     display: block;
 }
@@ -235,12 +236,23 @@ a {
 
 .hero-mascot {
     position: absolute;
-    top: -80px;
+    top: 150px;
     right: 2%;
-    width: clamp(200px, 25vw, 350px);
+    width: clamp(500px, 40vw, 900px);
+    /* Significantly larger hero mascot */
     z-index: 5;
-    transform: rotate(12deg);
+    transform: rotate(0deg);
     will-change: opacity, transform;
+    mix-blend-mode: multiply;
+    /* Blend the whole mascot container */
+}
+
+.hero-mascot video {
+    width: 100%;
+    height: auto;
+    display: block;
+    mix-blend-mode: multiply;
+    filter: brightness(1.2) contrast(1.4);
 }
 
 
@@ -361,12 +373,12 @@ a {
 
 .statement-icon {
     position: absolute;
-    right: 10%;
-    top: 30%;
+    left: 6%;
+    bottom: 8%;
     width: 120px;
     color: var(--primary);
     opacity: 0.6;
-    animation: airplane-float 3.8s ease-in-out infinite;
+    animation: airplane-diagonal 7s ease-in-out infinite alternate;
     transform-origin: center;
 }
 
@@ -423,25 +435,13 @@ a {
     display: block;
 }
 
-@keyframes airplane-float {
+@keyframes airplane-diagonal {
     0% {
-        transform: translate(0, 0) rotate(-10deg);
-    }
-
-    25% {
-        transform: translate(-14px, -10px) rotate(-2deg);
-    }
-
-    50% {
-        transform: translate(8px, 8px) rotate(5deg);
-    }
-
-    75% {
-        transform: translate(-6px, -4px) rotate(-4deg);
+        transform: translate(0, 0) rotate(10deg);
     }
 
     100% {
-        transform: translate(0, 0) rotate(-10deg);
+        transform: translate(clamp(240px, 46vw, 620px), clamp(-180px, -24vw, -300px)) rotate(-12deg);
     }
 }
 
@@ -822,15 +822,8 @@ a {
 .footer-title {
     font-family: var(--font-display);
     font-size: clamp(3rem, 8vw, 6rem);
-    background-color: #f0ece4;
-    background-image: url("https://i-p.rmcdn.net/635fde9e3d2caa0029c91035/4190189/image-9df82b03-38b7-4e76-b172-8afd26f6dba2.png?e=webp&nll=true&cX=187&cY=12&cW=817&cH=607");
-    background-size: cover;
-    background-position: center;
-    color: transparent;
-    -webkit-background-clip: text;
-    background-clip: text;
-    /* Un borde para que resalte sobre el fondo que es de la misma textura */
-    -webkit-text-stroke: 2px var(--black);
+    color: var(--primary-dark);
+    -webkit-text-stroke: 1px rgba(4, 4, 4, 0.22);
     line-height: 0.95;
 }
 
@@ -839,12 +832,19 @@ a {
     right: 15%;
     top: 50%;
     transform: translateY(-50%) rotate(8deg);
-    width: 140px;
+    width: 300px;
+    /* Increased from 190px */
+    mix-blend-mode: multiply;
+    /* Crucial for blending with the ticket background */
 }
 
-.footer-mascot img {
+.footer-mascot video {
     width: 100%;
-    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+    height: auto;
+    display: block;
+    mix-blend-mode: multiply;
+    /* Pushing brightness and contrast harder to eliminate light-gray residues */
+    filter: brightness(1.2) contrast(1.4);
 }
 
 .footer-info {
@@ -858,14 +858,30 @@ a {
 
 .footer-letter {
     flex-shrink: 0;
+    width: 9rem;
+    height: 9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+    margin-right: 0.5rem;
+    position: relative;
 }
 
-.footer-letter span {
-    font-family: var(--font-display);
-    font-size: 7rem;
-    color: var(--black);
-    opacity: 0.3;
-    line-height: 1;
+.footer-letter-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: 48% 50%;
+    opacity: 0.96;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.10);
+    mix-blend-mode: multiply;
+    transform-origin: center;
 }
 
 .footer-contact {
@@ -876,30 +892,32 @@ a {
 .footer-email {
     font-family: var(--font-serif);
     font-size: 1.5rem;
-    color: var(--black);
+    color: var(--primary-dark);
+    font-weight: 600;
     margin-bottom: 8px;
 }
 
 .footer-phone {
     font-family: var(--font-serif);
     font-size: 1.3rem;
-    color: var(--black);
+    color: var(--primary-dark);
+    font-weight: 600;
     margin-bottom: 8px;
 }
 
 .footer-address {
     font-family: var(--font-serif);
     font-size: 1rem;
-    color: var(--black);
-    opacity: 0.7;
+    color: var(--primary-dark);
+    opacity: 0.9;
     margin-bottom: 20px;
 }
 
 .footer-copy {
     font-family: var(--font-serif);
     font-size: 1rem;
-    color: var(--black);
-    opacity: 0.6;
+    color: var(--primary-dark);
+    opacity: 0.82;
 }
 
 .footer-social {
@@ -909,8 +927,9 @@ a {
 .social-label {
     font-family: var(--font-serif);
     font-size: 1.1rem;
-    color: var(--black);
+    color: var(--primary-dark);
     font-style: italic;
+    font-weight: 600;
     margin-bottom: 15px;
 }
 
@@ -1074,25 +1093,37 @@ a {
     position: fixed;
     width: 40px;
     height: 40px;
-    border: 1.5px solid var(--black);
+    border: 1.5px solid var(--white);
+    /* White for better inversion */
     border-radius: 50%;
     pointer-events: none;
-    z-index: 99998;
+    z-index: 999999;
     transform: translate(-50%, -50%);
-    transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+    transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, opacity 0.3s ease;
     mix-blend-mode: difference;
+    opacity: 0;
 }
 
 .cursor-dot {
     position: fixed;
     width: 6px;
     height: 6px;
-    background: var(--black);
+    background: var(--white);
+    /* Changed to white for better difference blending */
     border-radius: 50%;
     pointer-events: none;
-    z-index: 99999;
+    z-index: 1000000;
+    /* Highest */
     transform: translate(-50%, -50%);
     mix-blend-mode: difference;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    /* Hidden by default */
+}
+
+.custom-cursor.visible,
+.cursor-dot.visible {
+    opacity: 1;
 }
 
 .custom-cursor.expanded {

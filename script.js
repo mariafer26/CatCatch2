@@ -13,12 +13,30 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(cursorDot);
 
     let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+    let isInitialized = false;
 
     document.addEventListener('mousemove', (e) => {
+        if (!isInitialized) {
+            cursor.classList.add('visible');
+            cursorDot.classList.add('visible');
+            cursorX = e.clientX;
+            cursorY = e.clientY;
+            isInitialized = true;
+        }
         mouseX = e.clientX;
         mouseY = e.clientY;
         cursorDot.style.left = mouseX + 'px';
         cursorDot.style.top = mouseY + 'px';
+    });
+
+    document.addEventListener('mouseleave', () => {
+        cursor.classList.remove('visible');
+        cursorDot.classList.remove('visible');
+    });
+
+    document.addEventListener('mouseenter', () => {
+        cursor.classList.add('visible');
+        cursorDot.classList.add('visible');
     });
 
     (function animateCursor() {
@@ -29,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(animateCursor);
     })();
 
-    document.querySelectorAll('a, button, .btn-discover, .work-item').forEach(el => {
+    document.querySelectorAll('a, button, .btn-discover, .work-item, .nav-link, .nav-logo img').forEach(el => {
         el.addEventListener('mouseenter', () => cursor.classList.add('expanded'));
         el.addEventListener('mouseleave', () => cursor.classList.remove('expanded'));
     });
@@ -179,12 +197,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ===== Hero mascot parallax =====
-    const mascot = document.querySelector('.hero-mascot img');
+    const mascot = document.querySelector('.hero-mascot video');
     if (mascot) {
         window.addEventListener('mousemove', (e) => {
             const x = (e.clientX / window.innerWidth - 0.5) * 8;
             const y = (e.clientY / window.innerHeight - 0.5) * 8;
-            mascot.style.transform = `rotate(${5 + x * 0.3}deg) translate(${x}px, ${y}px)`;
+            mascot.style.transform = `rotate(${x * 0.3}deg) translate(${x}px, ${y}px)`;
         });
     }
 
@@ -245,8 +263,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroMascot = document.querySelector('.hero-mascot');
     if (heroMascot) {
         gsap.fromTo(heroMascot,
-            { opacity: 0, y: -60, rotate: 20, scale: 0.7 },
-            { opacity: 1, y: 0, rotate: 12, scale: 1, duration: 1.4, ease: 'elastic.out(1, 0.55)', delay: 0.6 }
+            { opacity: 0, y: -60, rotate: 0, scale: 0.7 },
+            { opacity: 1, y: 0, rotate: 0, scale: 1, duration: 1.4, ease: 'elastic.out(1, 0.55)', delay: 0.6 }
         );
     }
 
