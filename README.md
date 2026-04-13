@@ -94,21 +94,6 @@ Cada combo es una oportunidad limitada. Una vez que se acaban... ¡se acaban! Po
 
 ---
 
-## 📁 Estructura del Proyecto
-
-```
-CatCatch2/
-├── index.html          # Página principal (landing page)
-├── style.css           # Estilos globales y animaciones CSS
-├── script.js           # Lógica JS: animaciones, cursor, carrusel, GSAP
-├── logo.jpeg           # Logo de CatCatch
-├── C.jpg               # Imagen decorativa del footer
-├── C.gif               # Animación decorativa
-├── g.jpeg              # Imagen de recursos gráficos
-└── gatitomov.webm      # Video de la mascota (gatito animado)
-```
-
----
 
 ## 🌐 Secciones de la Landing Page
 
@@ -126,21 +111,12 @@ CatCatch2/
 
 ## 🚀 Cómo Ejecutar el Proyecto
 
-1. **Clona el repositorio:**
-   ```bash
-   git clone https://github.com/mariafer26/CatCatch2.git
-   cd CatCatch2
-   ```
+1. **Copia y pega el link:**
+   https://cat-catch2.vercel.app/#
 
-2. **Abre el archivo directamente en tu navegador:**
-   ```bash
-   open index.html
-   # o simplemente haz doble clic en index.html
-   ```
 
-3. ¡Listo! No se necesitan dependencias ni instalaciones adicionales. 🎉
+2. ¡Listo! No se necesitan dependencias ni instalaciones adicionales. 🎉
 
-> 💡 *Para una mejor experiencia, se recomienda usar un servidor local como [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) en VS Code.*
 
 ---
 
