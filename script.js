@@ -4,53 +4,25 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ===== Custom Cursor =====
-    const cursor = document.createElement('div');
-    cursor.className = 'custom-cursor';
-    const cursorDot = document.createElement('div');
-    cursorDot.className = 'cursor-dot';
-    document.body.appendChild(cursor);
-    document.body.appendChild(cursorDot);
+    const pillNavContainer = document.querySelector('.pill-nav-container');
 
-    let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
-    let isInitialized = false;
+    let lastNavScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+        if (!pillNavContainer) return;
 
-    document.addEventListener('mousemove', (e) => {
-        if (!isInitialized) {
-            cursor.classList.add('visible');
-            cursorDot.classList.add('visible');
-            cursorX = e.clientX;
-            cursorY = e.clientY;
-            isInitialized = true;
+        const currentScrollY = window.scrollY;
+        const hasMeaningfulDelta = Math.abs(currentScrollY - lastNavScrollY) > 6;
+
+        if (currentScrollY <= 20) {
+            pillNavContainer.classList.remove('is-hidden');
+        } else if (hasMeaningfulDelta && currentScrollY > lastNavScrollY) {
+            pillNavContainer.classList.add('is-hidden');
+        } else if (hasMeaningfulDelta && currentScrollY < lastNavScrollY) {
+            pillNavContainer.classList.remove('is-hidden');
         }
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursorDot.style.left = mouseX + 'px';
-        cursorDot.style.top = mouseY + 'px';
-    });
 
-    document.addEventListener('mouseleave', () => {
-        cursor.classList.remove('visible');
-        cursorDot.classList.remove('visible');
-    });
-
-    document.addEventListener('mouseenter', () => {
-        cursor.classList.add('visible');
-        cursorDot.classList.add('visible');
-    });
-
-    (function animateCursor() {
-        cursorX += (mouseX - cursorX) * 0.1;
-        cursorY += (mouseY - cursorY) * 0.1;
-        cursor.style.left = cursorX + 'px';
-        cursor.style.top = cursorY + 'px';
-        requestAnimationFrame(animateCursor);
-    })();
-
-    document.querySelectorAll('a, button, .btn-discover, .work-item, .nav-link, .nav-logo img').forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('expanded'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('expanded'));
-    });
+        lastNavScrollY = currentScrollY;
+    }, { passive: true });
 
     // ===== Scroll Progress Bar =====
     const progressBar = document.createElement('div');
@@ -73,33 +45,186 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.hero .reveal-up, .hero .reveal-scale').forEach(el => el.classList.add('active'));
     }, 200);
 
-    // ===== Navbar Active =====
-    const sections = document.querySelectorAll('section[id], header[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
+    // ===== PillNav Logic =====
+    const ease = 'power3.easeOut';
+    const initialLoadAnimation = true;
+    const circleRefs = document.querySelectorAll('.hover-circle');
+    const tlRefs = [];
+    const activeTweenRefs = [];
+    const logoImg = document.querySelector('.pill-logo img');
+    const logoTweenRef = { current: null };
+    const hamburger = document.querySelector('.mobile-menu-button');
+    const mobileMenu = document.querySelector('.mobile-menu-popover');
+    const navItems = document.querySelector('.pill-nav-items');
+    const logo = document.querySelector('.pill-logo');
+
+    const layout = () => {
+        circleRefs.forEach((circle, index) => {
+            if (!circle || !circle.parentElement) return;
+
+            const pill = circle.parentElement;
+            const rect = pill.getBoundingClientRect();
+            const w = rect.width;
+            const h = rect.height;
+            const R = ((w * w) / 4 + h * h) / (2 * h);
+            const D = Math.ceil(2 * R) + 2;
+            const delta = Math.ceil(R - Math.sqrt(Math.max(0, R * R - (w * w) / 4))) + 1;
+            const originY = D - delta;
+
+            circle.style.width = `${D}px`;
+            circle.style.height = `${D}px`;
+            circle.style.bottom = `-${delta}px`;
+
+            gsap.set(circle, {
+                xPercent: -50,
+                scale: 0,
+                transformOrigin: `50% ${originY}px`
+            });
+
+            const label = pill.querySelector('.pill-label');
+            const white = pill.querySelector('.pill-label-hover');
+
+            if (label) gsap.set(label, { y: 0 });
+            if (white) gsap.set(white, { y: h + 12, opacity: 0 });
+
+            if (tlRefs[index]) tlRefs[index].kill();
+            const tl = gsap.timeline({ paused: true });
+
+            tl.to(circle, { scale: 1.2, xPercent: -50, duration: 0.8, ease, overwrite: 'auto' }, 0);
+
+            if (label) {
+                tl.to(label, { y: -(h + 8), duration: 0.8, ease, overwrite: 'auto' }, 0);
+            }
+
+            if (white) {
+                gsap.set(white, { y: Math.ceil(h + 100), opacity: 0 });
+                tl.to(white, { y: 0, opacity: 1, duration: 0.8, ease, overwrite: 'auto' }, 0);
+            }
+
+            tlRefs[index] = tl;
+        });
+    };
+
+    layout();
+    window.addEventListener('resize', layout);
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(layout).catch(() => {});
+    }
+
+    if (mobileMenu) {
+        gsap.set(mobileMenu, { visibility: 'hidden', opacity: 0, scaleY: 1 });
+    }
+
+    if (initialLoadAnimation) {
+        if (logo) {
+            gsap.set(logo, { scale: 0 });
+            gsap.to(logo, { scale: 1, duration: 0.6, ease });
+        }
+
+        if (navItems) {
+            gsap.set(navItems, { width: 0, overflow: 'hidden' });
+            gsap.to(navItems, {
+                width: 'auto',
+                duration: 0.6,
+                ease,
+                onComplete: () => {
+                    navItems.style.overflow = '';
+                    layout();
+                }
+            });
+        }
+    }
+
+    // Pill Hover Events
+    const pills = document.querySelectorAll('.pill');
+    pills.forEach((pill, i) => {
+        pill.addEventListener('mouseenter', () => {
+            const tl = tlRefs[i];
+            if (!tl) return;
+            if (activeTweenRefs[i]) activeTweenRefs[i].kill();
+            activeTweenRefs[i] = tl.tweenTo(tl.duration(), { duration: 0.14, ease, overwrite: 'auto' });
+        });
+
+        pill.addEventListener('mouseleave', () => {
+            const tl = tlRefs[i];
+            if (!tl) return;
+            if (activeTweenRefs[i]) activeTweenRefs[i].kill();
+            activeTweenRefs[i] = tl.tweenTo(0, { duration: 0.12, ease, overwrite: 'auto' });
+        });
+    });
+
+    if (logo) {
+        logo.addEventListener('mouseenter', () => {
+            if (!logoImg) return;
+            if (logoTweenRef.current) logoTweenRef.current.kill();
+            gsap.set(logoImg, { rotate: 0 });
+            logoTweenRef.current = gsap.to(logoImg, { rotate: 360, duration: 0.2, ease, overwrite: 'auto' });
+        });
+    }
+
+    let isMobileMenuOpen = false;
+    if (hamburger) {
+        hamburger.addEventListener('click', () => {
+            isMobileMenuOpen = !isMobileMenuOpen;
+            hamburger.setAttribute('aria-expanded', String(isMobileMenuOpen));
+            const lines = hamburger.querySelectorAll('.hamburger-line');
+            if (isMobileMenuOpen) {
+                gsap.to(lines[0], { rotation: 45, y: 3, duration: 0.3, ease });
+                gsap.to(lines[1], { rotation: -45, y: -3, duration: 0.3, ease });
+                gsap.set(mobileMenu, { visibility: 'visible' });
+                gsap.fromTo(mobileMenu,
+                    { opacity: 0, y: 10, scaleY: 1 },
+                    { opacity: 1, y: 0, scaleY: 1, duration: 0.3, ease, transformOrigin: 'top center' }
+                );
+            } else {
+                gsap.to(lines[0], { rotation: 0, y: 0, duration: 0.3, ease });
+                gsap.to(lines[1], { rotation: 0, y: 0, duration: 0.3, ease });
+                gsap.to(mobileMenu, {
+                    opacity: 0, y: 10, scaleY: 1, duration: 0.2, ease, transformOrigin: 'top center',
+                    onComplete: () => gsap.set(mobileMenu, { visibility: 'hidden' })
+                });
+            }
+        });
+    }
+
+    // ScrollSpy & Smooth Scroll
+    const sections = document.querySelectorAll('section[id], header[id], footer[id]');
+    const navLinksDesktop = document.querySelectorAll('.pill');
+    const navLinksMobile = document.querySelectorAll('.mobile-menu-link');
 
     const activateNav = () => {
         let current = '';
         sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.getAttribute('id'); });
-        navLinks.forEach(l => {
-            l.classList.remove('active');
-            if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+        navLinksDesktop.forEach(l => {
+            l.classList.remove('is-active');
+            if (l.getAttribute('href') === '#' + current) l.classList.add('is-active');
+        });
+        navLinksMobile.forEach(l => {
+            l.classList.remove('is-active');
+            if (l.getAttribute('href') === '#' + current) l.classList.add('is-active');
         });
     };
     window.addEventListener('scroll', activateNav);
     activateNav();
 
-    // ===== Smooth Scroll =====
-    navLinks.forEach(link => {
+    document.querySelectorAll('.pill, .mobile-menu-link, .pill-logo').forEach(link => {
         link.addEventListener('click', (e) => {
             const href = link.getAttribute('href');
-            if (href?.startsWith('#')) {
+            if (href && href.startsWith('#')) {
                 e.preventDefault();
-                document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+                if (link.classList.contains('mobile-menu-link') && isMobileMenuOpen) {
+                    hamburger.click();
+                }
             }
         });
     });
 
     // ===== Stats Counter =====
+
     const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
@@ -196,38 +321,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ===== Hero mascot parallax =====
-    const mascot = document.querySelector('.hero-mascot video');
-    if (mascot) {
-        window.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 8;
-            const y = (e.clientY / window.innerHeight - 0.5) * 8;
-            mascot.style.transform = `rotate(${x * 0.3}deg) translate(${x}px, ${y}px)`;
-        });
-    }
-
-    // ===== About hover parallax =====
-    const aboutSection = document.querySelector('#about');
-    const airplane = document.querySelector('.statement-icon');
-    const bag = document.querySelector('.discover-bag');
-    if (aboutSection && airplane) {
-        aboutSection.addEventListener('mousemove', (e) => {
-            const r = aboutSection.getBoundingClientRect();
-            const x = ((e.clientX - r.left) / r.width - 0.5) * 22;
-            const y = ((e.clientY - r.top) / r.height - 0.5) * 16;
-            airplane.classList.add('is-hovering');
-            airplane.style.transform = `translate(${x}px, ${y}px) rotate(${x * 0.4}deg)`;
-            if (bag) bag.style.transform = `translate(${-x * 0.25}px, ${Math.abs(y) * 0.2}px) rotate(${8 - x * 0.25}deg)`;
-        });
-        aboutSection.addEventListener('mouseleave', () => {
-            airplane.classList.remove('is-hovering');
-            airplane.style.transform = '';
-            if (bag) bag.style.transform = '';
-        });
-    }
-
     // ===== Magnetic buttons =====
-    document.querySelectorAll('.btn-magnetic, .btn-discover, .social-circle').forEach(btn => {
+    document.querySelectorAll('.btn-magnetic, .btn-discover, .btn-hero, .social-circle').forEach(btn => {
         btn.addEventListener('mousemove', (e) => {
             const r = btn.getBoundingClientRect();
             const x = e.clientX - r.left - r.width / 2;
@@ -249,22 +344,22 @@ document.addEventListener('DOMContentLoaded', () => {
         ).join('');
         gsap.fromTo('.hero-char-inner',
             { yPercent: 110, rotateX: -40 },
-            { yPercent: 0, rotateX: 0, stagger: 0.045, duration: 1.1, ease: 'expo.out', delay: 0.3 }
+            { yPercent: 0, rotateX: 0, stagger: 0.025, duration: 0.72, ease: 'expo.out', delay: 0.12 }
         );
     }
 
     // Hero subtitle fade-up
     gsap.fromTo('.hero-subtitle',
         { opacity: 0, y: 24 },
-        { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 1.1 }
+        { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', delay: 0.42 }
     );
 
     // Hero mascot — elastic bounce entrance
-    const heroMascot = document.querySelector('.hero-mascot');
+    const heroMascot = document.querySelector('.hero-gato');
     if (heroMascot) {
         gsap.fromTo(heroMascot,
             { opacity: 0, y: -60, rotate: 0, scale: 0.7 },
-            { opacity: 1, y: 0, rotate: 0, scale: 1, duration: 1.4, ease: 'elastic.out(1, 0.55)', delay: 0.6 }
+            { opacity: 1, y: 0, rotate: 0, scale: 1, duration: 0.8, ease: 'back.out(1.25)', delay: 0.28 }
         );
     }
 
@@ -273,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (heroWrapper) {
         gsap.fromTo(heroWrapper,
             { opacity: 0, scale: 0.96 },
-            { opacity: 1, scale: 1, duration: 1.2, ease: 'power3.out', delay: 0.1 }
+            { opacity: 1, scale: 1, duration: 0.65, ease: 'power3.out', delay: 0.05 }
         );
     }
 

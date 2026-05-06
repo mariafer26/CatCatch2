@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CatCatch | Atrápalo antes que se acabe</title>
     <meta name="description"
-        content="CatCatch — Atrápalo antes que se acabe. Somos el destino donde las grandes ideas cobran vida.">
+        content="CatCatch conecta restaurantes locales con consumidores que buscan comida de calidad a precio justo en Medellín.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -17,32 +17,109 @@
 
 <body>
 
-    <!-- ========== NAVBAR (Pill-shaped, floating, centered) ========== -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-pill">
-            <a href="#home" class="nav-link active">Home</a>
-            <a href="#about" class="nav-link">About</a>
-            <div class="nav-logo">
+    <!-- ========== NAVBAR (PillNav Component) ========== -->
+    <div class="pill-nav-container">
+        <nav class="pill-nav catcatch-pill-nav" aria-label="Primary"
+            style="--base:#040404; --pill-bg:#f0ece4; --hover-text:#f0ece4; --pill-text:#040404">
+            <a class="pill-logo" href="#home" aria-label="Home">
                 <img src="logo.jpeg" alt="CatCatch">
+            </a>
+
+            <div class="pill-nav-items desktop-only">
+                <ul class="pill-list" role="menubar">
+                    <li role="none">
+                        <a role="menuitem" href="#home" class="pill is-active">
+                            <span class="hover-circle" aria-hidden="true"></span>
+                            <span class="label-stack">
+                                <span class="pill-label">HOME</span>
+                                <span class="pill-label-hover" aria-hidden="true">HOME</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li role="none">
+                        <a role="menuitem" href="#about" class="pill">
+                            <span class="hover-circle" aria-hidden="true"></span>
+                            <span class="label-stack">
+                                <span class="pill-label">ABOUT</span>
+                                <span class="pill-label-hover" aria-hidden="true">ABOUT</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li role="none">
+                        <a role="menuitem" href="#products" class="pill">
+                            <span class="hover-circle" aria-hidden="true"></span>
+                            <span class="label-stack">
+                                <span class="pill-label">DEALS</span>
+                                <span class="pill-label-hover" aria-hidden="true">DEALS</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li role="none">
+                        <a role="menuitem" href="#work" class="pill pill-wide">
+                            <span class="hover-circle" aria-hidden="true"></span>
+                            <span class="label-stack">
+                                <span class="pill-label">CÓMO FUNCIONA</span>
+                                <span class="pill-label-hover" aria-hidden="true">CÓMO FUNCIONA</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li role="none">
+                        <a role="menuitem" href="#contact" class="pill">
+                            <span class="hover-circle" aria-hidden="true"></span>
+                            <span class="label-stack">
+                                <span class="pill-label">CONTACT</span>
+                                <span class="pill-label-hover" aria-hidden="true">CONTACT</span>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <a href="#products" class="nav-link">Productos</a>
-            <a href="#contact" class="nav-link">Contacto</a>
+
+            <button class="mobile-menu-button mobile-only" aria-label="Toggle menu" aria-expanded="false">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </nav>
+
+        <div class="mobile-menu-popover mobile-only"
+            style="--base:#040404; --pill-bg:#f0ece4; --hover-text:#f0ece4; --pill-text:#040404">
+            <ul class="mobile-menu-list">
+                <li><a href="#home" class="mobile-menu-link is-active">HOME</a></li>
+                <li><a href="#about" class="mobile-menu-link">ABOUT</a></li>
+                <li><a href="#products" class="mobile-menu-link">DEALS</a></li>
+                <li><a href="#work" class="mobile-menu-link">CÓMO FUNCIONA</a></li>
+                <li><a href="#contact" class="mobile-menu-link">CONTACT</a></li>
+            </ul>
         </div>
-    </nav>
+    </div>
 
     <!-- ========== HERO SECTION ========== -->
     <header class="hero" id="home">
         <div class="hero-sticky">
             <span class="hero-tag reveal-up"></span>
             <div class="hero-text-wrapper">
-                <div class="hero-main-layout">
-                    <div class="hero-content">
+                <div class="hero-grid">
+                    <div class="hero-texto">
                         <h1 class="hero-title reveal-up">CATCATCH</h1>
                         <p class="hero-subtitle reveal-up delay-1"><span class="catch-anim">( atrápalo antes que se
                                 acabe )</span></p>
+                        <div class="hero-divider reveal-up delay-1"></div>
+                        <p class="hero-statement reveal-up delay-2">
+                            CatCatch conecta restaurantes locales con consumidores que buscan comida de calidad a precio
+                            justo, reduciendo el desperdicio y generando valor para ambos lados.
+                        </p>
+                        <div class="hero-chips reveal-up delay-2" aria-label="Contexto de CatCatch">
+                            <span>Para consumidores</span>
+                            <span>Para restaurantes</span>
+                            <span>Medellín, Colombia</span>
+                        </div>
+                        <div class="hero-actions reveal-up delay-2">
+                            <a href="#work" class="btn-hero btn-hero-primary">Ver cómo funciona</a>
+                            <a href="#about" class="btn-hero btn-hero-secondary">Conocer el proyecto →</a>
+                        </div>
                     </div>
-                    <div class="hero-mascot reveal-scale delay-2">
-                        <video src="gatitomov.webm" autoplay loop muted playsinline alt="CatCatch mascot"></video>
+                    <div class="hero-gato reveal-scale delay-2">
+                        <video src="gatitomov.webm" autoplay loop muted playsinline aria-label="CatCatch gato animado"></video>
                     </div>
                 </div>
             </div>
@@ -63,26 +140,74 @@
         </div>
     </div>
 
+    <!-- ========== PROBLEM / SOLUTION SECTION ========== -->
+    <section class="problem-section" id="problem">
+        <div class="problem-inner">
+            <div class="problem-copy reveal-up">
+                <span class="section-label">( problema / solución )</span>
+                <h2 class="problem-title">EL PROBLEMA<br>QUE<br>RESOLVEMOS</h2>
+                <p>
+                    Cada día, toneladas de comida de calidad se desperdician cuando los restaurantes están a punto de
+                    cerrar. El negocio pierde ingresos. El planeta pierde recursos. El consumidor pierde una oportunidad.
+                </p>
+            </div>
+            <div class="problem-panel reveal-up delay-1">
+                <h3>La escala del problema</h3>
+                <ul class="problem-list">
+                    <li>El 30% de los alimentos producidos en el mundo se desperdicia antes de ser consumidos (FAO).</li>
+                    <li>En Colombia, los restaurantes reportan pérdidas de hasta el 15% de su producción diaria por excedentes al cierre.</li>
+                    <li>El consumidor urbano busca opciones de comida accesible y cercana, pero no sabe qué hay disponible en tiempo real.</li>
+                </ul>
+            </div>
+            <div class="solution-callout reveal-up delay-2">
+                <span>Nuestra solución</span>
+                <p>
+                    CatCatch convierte el excedente en oportunidad. Los restaurantes recuperan ingresos que de otro modo
+                    se perderían. Los usuarios acceden a comida de calidad a precio justo. Y juntos reducen el desperdicio
+                    alimentario de la ciudad.
+                </p>
+            </div>
+        </div>
+    </section>
+
     <!-- ========== STATS SECTION ========== -->
-    <section class="stats-section">
+    <section class="stats-section" id="stats">
+        <div class="stats-header reveal-up">
+            <span class="section-label">( métricas proyectadas )</span>
+            <h2 class="stats-title">LOS NÚMEROS<br>DEL MODELO</h2>
+            <p>Todos los datos son proyecciones del equipo fundador para el primer año de operación en Medellín, Colombia (2026). No representan cifras actuales.</p>
+        </div>
         <div class="stats-inner">
             <div class="stat-item">
-                <span class="stat-number" data-target="50">0</span>
-                <span class="stat-suffix">%</span>
-                <p class="stat-label">de descuento máximo</p>
+                <div class="stat-value">
+                    <span class="stat-number" data-target="50">0</span>
+                    <span class="stat-suffix">%</span>
+                </div>
+                <span class="stat-projection">PROYECCIÓN AÑO 1</span>
+                <p class="stat-label">descuento máximo por combo</p>
+                <p class="stat-context">Descuento aplicado sobre precio de carta. El restaurante decide el porcentaje según su excedente.</p>
             </div>
-            <div class="stat-divider"></div>
             <div class="stat-item">
-                <span class="stat-number" data-target="120">0</span>
-                <span class="stat-suffix">+</span>
-                <p class="stat-label">restaurantes aliados</p>
+                <div class="stat-value">
+                    <span class="stat-number" data-target="120">0</span>
+                    <span class="stat-suffix">+</span>
+                </div>
+                <span class="stat-projection">PROYECCIÓN AÑO 1</span>
+                <p class="stat-label">restaurantes aliados meta</p>
+                <p class="stat-context">Basado en análisis del mercado gastronómico de Medellín y tasas de adopción de plataformas similares.</p>
             </div>
-            <div class="stat-divider"></div>
             <div class="stat-item">
-                <span class="stat-number" data-target="3000">0</span>
-                <span class="stat-suffix">+</span>
-                <p class="stat-label">combos salvados</p>
+                <div class="stat-value">
+                    <span class="stat-number stat-number-long" data-target="3000">0</span>
+                    <span class="stat-suffix stat-suffix-long">+</span>
+                </div>
+                <span class="stat-projection">PROYECCIÓN AÑO 1</span>
+                <p class="stat-label">combos salvados primer año</p>
+                <p class="stat-context">Estimado a partir de frecuencia de uso proyectada y base de usuarios objetivo en año 1.</p>
             </div>
+        </div>
+        <div class="stats-footnote">
+            *Proyecciones construidas sobre el modelo de negocio del equipo fundador. Medellín, Colombia, 2026. Los supuestos detallados están disponibles en el documento de plan de negocio.
         </div>
     </section>
 
@@ -92,18 +217,28 @@
         <div class="about-text-wrapper">
             <div class="big-statement-inner">
                 <h2 class="big-statement-title reveal-up">TU MEJOR<br>ALIADO</h2>
-                <div class="statement-icon reveal-scale delay-2">
-                    <!-- paper airplane SVG -->
-                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 90L90 50L10 10L30 50L10 90Z" stroke="currentColor" stroke-width="3" fill="none" />
-                        <path d="M30 50L90 50" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                </div>
                 <p class="about-copy reveal-up delay-2">
                     En CatCatch conectamos personas con comida de calidad a precios que no se repiten.
                     Descubre combos sorpresa de restaurantes cercanos, ahorra en cada compra y atrapa oportunidades
                     antes de que se acaben.
                 </p>
+                <div class="ally-cards-row reveal-up delay-2">
+                    <article class="ally-card">
+                        <span class="ally-card-icon">🍱</span>
+                        <h3>Combos sorpresa</h3>
+                        <p>Comida de calidad de restaurantes cercanos, a precio que no se repite.</p>
+                    </article>
+                    <article class="ally-card">
+                        <span class="ally-card-icon">💸</span>
+                        <h3>Hasta 50% de descuento</h3>
+                        <p>Ahorra en cada compra. Los mejores precios justo antes del cierre.</p>
+                    </article>
+                    <article class="ally-card">
+                        <span class="ally-card-icon">🌱</span>
+                        <h3>Salvas el planeta</h3>
+                        <p>Cada combo que atrapas es comida que no se desperdicia.</p>
+                    </article>
+                </div>
             </div>
             <div class="discover-row reveal-up delay-2">
                 <div class="discover-line"></div>
@@ -117,31 +252,34 @@
 
             <!-- Product Card 1 -->
             <div class="product-row reveal-up">
-                <div class="product-card">
-                    <div class="card-left">
-                        <h4 class="card-label">Oferta del Día</h4>
-                        <p>CatCatch Combo: Rescata un paquete sorpresa con comida de calidad de tus lugares favoritos.
-                        </p>
-                        <p class="card-caution"><em>*Atención: Últimas unidades disponibles con hasta -50% de
-                                descuento.</em></p>
-                        <h4 class="card-label">Qué Atrapas</h4>
-                        <p>Comida buena, a un precio inmejorable, salvando el planeta de paso.</p>
-                        <div class="card-icons">
-                            <span class="icon-circle">♻</span>
-                            <span class="icon-diamond">◆</span>
-                        </div>
-                    </div>
-                    <div class="card-right">
-                        <div class="card-product-visual">
-                            <div class="can-shape">
-                                <span class="can-label">CatCatch<br>DEAL</span>
-                                <span class="can-pct">-50%</span>
+                <div class="product-preview">
+                    <div class="product-card">
+                        <div class="card-left">
+                            <h4 class="card-label">Oferta del Día</h4>
+                            <p>CatCatch Combo: Rescata un paquete sorpresa con comida de calidad de tus lugares favoritos.
+                            </p>
+                            <p class="card-caution"><em>*Atención: Últimas unidades disponibles con hasta -50% de
+                                    descuento.</em></p>
+                            <h4 class="card-label">Qué Atrapas</h4>
+                            <p>Comida buena, a un precio inmejorable, salvando el planeta de paso.</p>
+                            <div class="card-icons">
+                                <span class="icon-circle">♻</span>
+                                <span class="icon-diamond">◆</span>
                             </div>
                         </div>
-                        <div class="card-barcode">
-                            <div class="barcode-lines"></div>
+                        <div class="card-right">
+                            <div class="card-product-visual">
+                                <div class="can-shape">
+                                    <span class="can-label">CatCatch<br>DEAL</span>
+                                    <span class="can-pct">-50%</span>
+                                </div>
+                            </div>
+                            <div class="card-barcode">
+                                <div class="barcode-lines"></div>
+                            </div>
                         </div>
                     </div>
+                    <p class="app-preview-label">Así se verá en la app</p>
                 </div>
                 <div class="product-info">
                     <h3 class="product-name reveal-up delay-1">CATCH THE DEAL</h3>
@@ -156,20 +294,21 @@
     </section>
 
 
-    <!-- ========== WORK / PORTFOLIO SECTION ========== -->
+    <!-- ========== CÓMO FUNCIONA SECTION ========== -->
     <section class="work-section" id="work">
         <div class="work-header">
             <span class="section-label">( cómo funciona )</span>
             <h2 class="work-title reveal-up">ASÍ FUNCIONA<br>CATCATCH</h2>
+            <p class="work-intro reveal-up delay-1">Un modelo de dos lados: los restaurantes reducen pérdidas, los usuarios acceden a comida de calidad. Todos ganan, incluyendo el planeta.</p>
         </div>
         <div class="work-grid">
             <div class="work-item reveal-up">
                 <div class="work-item-inner">
                     <div class="work-num">01</div>
                     <div class="work-icon"></div>
-                    <h3 class="work-item-title">Restaurante publica</h3>
-                    <p class="work-item-desc">El negocio carga sus combos sorpresa del día con hasta 50% de descuento
-                        antes de cerrar.</p>
+                    <span class="work-kicker">Lado restaurante</span>
+                    <h3 class="work-item-title">El restaurante publica su combo</h3>
+                    <p class="work-item-desc">Al acercarse el cierre, el negocio sube un combo sorpresa con hasta 50% de descuento. Recupera ingresos que de otro modo se perderían.</p>
                 </div>
                 <div class="work-hover-overlay">
                     <span>Únete como negocio →</span>
@@ -179,9 +318,9 @@
                 <div class="work-item-inner">
                     <div class="work-num">02</div>
                     <div class="work-icon"></div>
-                    <h3 class="work-item-title">Tú lo descubres</h3>
-                    <p class="work-item-desc">Ves los combos disponibles cerca de ti en tiempo real. Precio fijo,
-                        sorpresa garantizada.</p>
+                    <span class="work-kicker">Lado consumidor</span>
+                    <h3 class="work-item-title">El usuario lo descubre y reserva</h3>
+                    <p class="work-item-desc">En tiempo real, el usuario ve los combos disponibles cerca, elige el que más le llama y reserva antes de que se agote.</p>
                 </div>
                 <div class="work-hover-overlay">
                     <span>Ver combos →</span>
@@ -191,20 +330,24 @@
                 <div class="work-item-inner">
                     <div class="work-num">03</div>
                     <div class="work-icon"></div>
-                    <h3 class="work-item-title">Atrápalo</h3>
-                    <p class="work-item-desc">Reservas, vas, recoges. Comida buena a precio justo — y el planeta
-                        agradece.</p>
+                    <span class="work-kicker">Impacto real</span>
+                    <h3 class="work-item-title">Recoge, come, salva</h3>
+                    <p class="work-item-desc">Va al restaurante, recibe su combo y disfruta. Comida buena a precio justo, y una porción de desperdicio menos en la ciudad.</p>
                 </div>
                 <div class="work-hover-overlay">
                     <span>Empezar ahora →</span>
                 </div>
             </div>
         </div>
+        <div class="revenue-note reveal-up">
+            <h3>Modelo de ingresos</h3>
+            <p>CatCatch opera como marketplace. Los ingresos provienen de una comisión por transacción completada exitosamente. Sin suscripciones ocultas para el usuario.</p>
+        </div>
     </section>
 
 
     <!-- ========== CUSTOMERS SECTION ========== -->
-    <section class="customers-section">
+    <section class="customers-section" id="customers">
         <div class="customers-header">
             <h2 class="customers-title reveal-up">CLIENTES</h2>
             <p class="customers-sub reveal-up delay-1">( que confiaron en nosotros )</p>
@@ -228,7 +371,7 @@
     </section>
 
     <!-- ========== REVIEWS SECTION ========== -->
-    <section class="reviews-section">
+    <section class="reviews-section" id="reviews">
         <div class="reviews-label reveal-up">
             <span class="pill-label">review</span>
         </div>
@@ -274,7 +417,7 @@
                     <img src="C.jpg" alt="" class="footer-letter-image" aria-hidden="true">
                 </div>
                 <div class="footer-contact">
-                    <p class="footer-email">catcatch@hotmail.com</p>
+                    <p class="footer-email">hola@catcatch.co</p>
                     <p class="footer-phone">+57 324 3493284</p>
                     <p class="footer-address">Medellín, Colombia</p>
                     <p class="footer-copy">Made by CatCatch 2026 ©</p>
@@ -282,8 +425,8 @@
                 <div class="footer-social">
                     <p class="social-label">Síguenos</p>
                     <div class="social-icons">
-                        <a href="#" class="social-circle">IG</a>
-                        <a href="#" class="social-circle">IN</a>
+                        <a href="#" class="social-circle">@catcatch_co</a>
+                        <a href="#" class="social-circle">@catcatch</a>
                     </div>
                 </div>
                 <div class="footer-barcode">
